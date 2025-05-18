@@ -1,7 +1,16 @@
-import * as process from 'process'
+// import * as process from 'process'
+
+// export function getBaseURL(): string {
+//     return process.env['NODE_ENV'] === 'production' ? prodURL() : 'http://localhost:8899';
+// }
 
 export function getBaseURL(): string {
-    return process.env['NODE_ENV'] === 'production' ? prodURL() : 'http://localhost:8899';
+    // Check if we're in development mode by looking at the URL
+    // This works in both development and production environments
+    if (window.location.hostname === 'localhost' && (window.location.port === '5173' || window.location.port === '8899')) {
+        return 'http://localhost:8899';
+    }
+    return prodURL();
 }
 
 function prodURL(): string {

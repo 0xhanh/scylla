@@ -35,7 +35,7 @@ export default class GeoDistribution extends React.Component<GeoDistributionProp
             <div>
                 <ComposableMap style={{width: "100%"}}>
                     <ZoomableGroup>
-                        <Geographies geography={'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m-simplified.json'}>
+                        <Geographies geography={'https://raw.githubusercontent.com/ixofoundation/ixo-webclient/4fee72cc2d5db163cf4d955e1a5a962615a76a81/src/data/maps/world-50m-simplified.json'}>
                             {({ geographies }) => geographies.map((geography) => (
                                 <Geography
                                     key={geography.properties.ISO_A3 + '_' + geography.properties.NAME}

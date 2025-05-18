@@ -17,10 +17,16 @@ from .kuaidaili_provider import KuaidailiProvider
 from .spys_me_provider import SpyMeProvider
 from .spys_one_provider import SpysOneProvider
 from .xici_provider import XiciProvider
+from .opl_provider import OplProvider
+from .proxyscrape_provider import ProxyScrapeProvider
+from .gologin_provider import GologinProvider
 
 all_providers = [
+    OplProvider,
+    ProxyScrapeProvider,
+    GologinProvider,
     A2uProvider,
-    CoolProxyProvider,
+    # CoolProxyProvider, 
     Data5uProvider,
     FreeProxyListProvider,
     HttpProxyProvider,
@@ -36,7 +42,7 @@ all_providers = [
     PubproxyProvider,
     RmccurdyProvider,
     RudnkhProvider,
-    TheSpeedXProvider
+    TheSpeedXProvider,
 ]
 
 # Provider references:

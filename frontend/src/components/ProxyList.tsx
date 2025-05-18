@@ -91,8 +91,8 @@ export default class ProxyIPList extends React.Component<Props, AppState> {
         const parsed = queryString.parse(props.location.search);
 
         const page = parsed['page'] || 1;
-        const https = parsed['https'] || null;
-        const anonymous = parsed['anonymous'] || null;
+        const https = parsed['https'] || false;
+        const anonymous = parsed['anonymous'] || 'any';
 
         const params: any = {};
 

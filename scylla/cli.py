@@ -36,6 +36,9 @@ def main(args) -> int:
     parsed_args = parser.parse_args(args)
 
     parsed_args_dict = vars(parsed_args)
+    print("-================== options ==================")
+    print(parsed_args_dict)
+    print("-=========================== ==================")
 
     batch_set_config(**vars(parsed_args))
 

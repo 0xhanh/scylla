@@ -4,9 +4,21 @@ services:
   scylla:
     build:
       context: .
-      target: prod
+    # args:
+      # - BUILD_ENV=production
+    image: hanhx/scylla:latest
     volumes:
-      - /var/www/scylla:/var/www/scylla
+      - ./data:/var/www/scylla
+      # - scylla_data:/var/www/scylla
+    environment:
+      - SCYLLA_NO_WEBSERVER=false
+      - SCYLLA_SKIP_SCHEDULER=true
+      - SCYLLA_LOG_LEVEL=DEBUG
+      - SCYLLA_FEED_NEW_INTERVAL_MINUTES=10
+      - SCYLLA_DB_PATH=/var/www/scylla/db
     ports:
       - "8899:8899"
       - "8081:8081"
+
+volumes:
+  scylla_data:

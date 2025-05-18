@@ -1,6 +1,6 @@
 import datetime
 import math
-
+import os
 from peewee import CharField, DateTimeField, BooleanField, FloatField, IntegerField, SqliteDatabase
 from playhouse.signals import pre_save, Model
 
@@ -9,6 +9,8 @@ from scylla.loggings import logger
 
 _db = None
 
+def print_tables(mydb):
+    tables = mydb.get_tables()
 
 def create_connection() -> SqliteDatabase:
     """
@@ -17,17 +19,31 @@ def create_connection() -> SqliteDatabase:
     """
     global _db
     if _db:
+        logger.info(f'reuse existing db connection: {_db.database}')
+        # print_tables(_db)
         return _db
     else:
         logger.debug('create new db connection')
-        _db = SqliteDatabase(get_config('db_path', './scylla.db'))
+        dbpath = os.environ.get('SCYLLA_DB_PATH') or get_config('db_path', './scylla.db')
+        # Ensure the directory exists
+        db_dir = os.path.dirname(os.path.abspath(dbpath))
+        if not os.path.exists(db_dir):
+            os.makedirs(db_dir, exist_ok=True)
+            
+        logger.info(f'Database path: {dbpath}')
+        
+        _db = SqliteDatabase(dbpath)
         return _db
-
 
 def create_db_tables():
     db = create_connection()
-    db.create_tables([ProxyIP])
-
+    # Check if tables exist before creating them
+    tables = db.get_tables()
+    if 'proxy_ips' not in tables:
+        logger.info("Creating proxy_ips table")
+        db.create_tables([ProxyIP])
+    else:
+        logger.info("Table proxy_ips already exists")
 
 class BaseModel(Model):
     class Meta:

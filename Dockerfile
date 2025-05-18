@@ -5,6 +5,7 @@ WORKDIR /root
 COPY . .
 RUN cd frontend && npm install
 RUN make assets-build
+# RUN cd frontend && npm run build:scylla:prod
 
 FROM ubuntu:focal as python-build
 
@@ -14,7 +15,7 @@ ENV TZ=America/Los_Angeles
 RUN apt-get update && \
     apt-get install -y python3 python3-distutils libpython3-dev curl g++ gcc libxslt-dev make libcurl4-openssl-dev build-essential libssl-dev && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
-    curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    curl -sSL https://bootstrap.pypa.io/pip/3.8/get-pip.py -o get-pip.py && \
     python get-pip.py && \
     rm get-pip.py && \
     # Feature-parity with node.js base images.
@@ -26,7 +27,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY --from=node-build /root/scylla/assets ./scylla/assets
+COPY --from=node-build /root/scylla/assets /app/scylla/assets
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 RUN python3 -m playwright install --with-deps chromium
@@ -34,7 +35,9 @@ COPY . .
 RUN python3 setup.py install
 
 RUN mkdir -p /var/www/scylla
+RUN chmod 777 /var/www/scylla
 VOLUME /var/www/scylla
+
 
 RUN python3 -m playwright install chromium --with-deps
 
